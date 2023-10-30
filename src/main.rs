@@ -16,8 +16,8 @@ async fn main() {
         Err(_e) => "8080".to_string(),
     };
     let address: SocketAddr = format!("0.0.0.0:{}", port)
-            .parse()
-            .expect("Failed to parse address");
+        .parse()
+        .expect("Failed to parse address");
 
     let app = Router::new().route("/convert", post(convert));
 
@@ -34,10 +34,8 @@ async fn convert(json: Json<ConvertRequest>) -> impl IntoResponse {
         Err(e) => {
             println!("Error: {:?}", e);
             return Json(json!({"status": "error"}));
-            
         }
     };
-    
 
     Json(json!({
         "status": "ok",
@@ -50,14 +48,13 @@ struct ConvertRequest {
     url: String,
 }
 
-
 async fn convert_file(url: String) -> Result<String> {
-  // Fetch image data from the URL
-  let resp = reqwest::get(&url).await?;
-  let bytes = resp.bytes().await?;
+    // Fetch image data from the URL
+    let resp = reqwest::get(&url).await?;
+    let bytes = resp.bytes().await?;
 
-// Decode the image data
-let img = image::load_from_memory(&bytes).unwrap().to_rgb8();
+    // Decode the image data
+    let img = image::load_from_memory(&bytes).unwrap().to_rgb8();
 
     // Set the new dimensions (e.g., downscale by 2x)
     let (w1, h1) = img.dimensions();
